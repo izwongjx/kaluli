@@ -11,7 +11,7 @@ const BottomNav = () => {
   ];
 
   return (
-    <div className="absolute bottom-0 w-full bg-white rounded-t-4xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)] border-t border-pink/20 h-[80px] flex justify-around items-center px-4 pb-2 z-50">
+    <div className="absolute bottom-0 w-full bg-white rounded-t-4xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)] border-t border-pink/20 h-[95px] flex justify-around items-start pt-3 px-4 pb-6 z-50">
       {navItems.map((item) => (
         <NavLink
           key={item.to}
