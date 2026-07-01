@@ -13,8 +13,8 @@ function App() {
   const location = useLocation();
 
   return (
-    <div className="min-h-[100dvh] bg-slate-100 flex justify-center w-full font-sans">
-      <div className="w-full sm:max-w-[430px] bg-cream shadow-soft h-[100dvh] flex flex-col relative overflow-hidden">
+    <div className="h-full bg-cream flex justify-center w-full font-sans overflow-hidden">
+      <div className="w-full max-w-[480px] h-full flex flex-col relative overflow-hidden transition-all duration-300">
         
         {/* Temporary Restart Button */}
         <button 

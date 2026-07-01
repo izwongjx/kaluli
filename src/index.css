@@ -5,6 +5,13 @@
 @tailwind utilities;
 
 @layer base {
+  html, body, #root {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
   body {
     @apply bg-cream text-slate-800 font-sans antialiased;
     /* Soft pattern or pure color */
