@@ -28,7 +28,7 @@ function App() {
           <QuizGate />
         ) : (
           <>
-            <div key={location.pathname} className="flex-1 overflow-y-auto hide-scrollbar pt-8 pb-[120px] animate-[pageFadeIn_0.3s_ease-out]">
+            <div key={location.pathname} className="flex-1 overflow-y-auto hide-scrollbar pt-8 pb-[80px] animate-[pageFadeIn_0.3s_ease-out]">
               <Routes location={location}>
                 <Route path="/" element={<Home />} />
                 <Route path="/log" element={<LogFood />} />

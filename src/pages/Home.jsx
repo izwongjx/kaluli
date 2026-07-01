@@ -61,7 +61,7 @@ const Home = () => {
   };
 
   return (
-    <div className="flex flex-col items-center w-full h-full pb-20 overflow-y-auto bg-cream animate-[pageFadeIn_0.4s_ease-out] relative">
+    <div className="flex flex-col items-center w-full min-h-full pb-4 bg-cream animate-[pageFadeIn_0.4s_ease-out] relative">
       
       {/* Top Hanging Progress Arc */}
       <div className="absolute top-0 left-0 w-full h-[180px] pointer-events-none z-0">
@@ -94,10 +94,10 @@ const Home = () => {
       </div>
 
       {/* Flexible Spacer to push content down */}
-      <div className="flex-1 min-h-[6rem] w-full pointer-events-none"></div>
+      <div className="flex-1 min-h-[2rem] md:min-h-[4rem] w-full pointer-events-none"></div>
 
       {/* Centered Chat Bubble */}
-      <div className="relative z-10 w-full max-w-[280px] md:max-w-[360px] px-2 mb-2 animate-[float_4s_ease-in-out_infinite] mt-16 md:mt-8 transition-all duration-300">
+      <div className="relative z-10 w-full max-w-[280px] md:max-w-[360px] px-2 mb-2 animate-[float_4s_ease-in-out_infinite] mt-8 md:mt-12 transition-all duration-300">
         <div className="relative bg-white border-[2px] border-slate-800 rounded-[20px] p-4 md:p-6 shadow-sm">
           <span className="text-slate-800 font-bold text-[15px] md:text-[20px] leading-relaxed tracking-wide block text-center">
             {message}
@@ -108,7 +108,7 @@ const Home = () => {
       </div>
 
       {/* Centered Avatar */}
-      <div className="relative z-10 w-[240px] h-[240px] md:w-[340px] md:h-[340px] flex justify-center items-end mb-8 md:mb-12 mt-4 transition-all duration-300">
+      <div className="relative z-10 w-[200px] h-[200px] sm:w-[240px] sm:h-[240px] md:w-[340px] md:h-[340px] flex justify-center items-end mb-6 md:mb-12 mt-2 transition-all duration-300">
         <img src="/boy1.png" alt="Boy Avatar" className="w-full h-full object-contain object-bottom" />
       </div>
 
