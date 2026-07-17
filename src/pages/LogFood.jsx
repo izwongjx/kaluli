@@ -11,6 +11,8 @@ const LogFood = () => {
   const [selectedSubItems, setSelectedSubItems] = useState({});
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [addonQuantities, setAddonQuantities] = useState({});
+  const [selectedSubItemCategory, setSelectedSubItemCategory] = useState('全部');
+  const [selectedVariants, setSelectedVariants] = useState({});
   const filteredFood = FOOD_DB.filter(f => {
     const matchesSearch = search === '' || f.name.toLowerCase().includes(search.toLowerCase());
     const matchesCategory = !selectedCategory || f.category === selectedCategory;
@@ -25,7 +27,13 @@ const LogFood = () => {
     if (!selectedFood || selectedFood.type !== 'composite') return selectedFood?.kcalPerPortion || 0;
     let total = 0;
     selectedFood.items.forEach(item => {
-      if (selectedSubItems[item.name]) total += item.kcal;
+      if (selectedSubItems[item.name]) {
+        if (item.variants) {
+          total += item.variants[selectedVariants[item.name] || 0].kcal;
+        } else {
+          total += item.kcal;
+        }
+      }
     });
     return total;
   };
@@ -55,7 +63,12 @@ const LogFood = () => {
       let name = selectedFood.name;
       
       if (selectedFood.type === 'composite') {
-        const selectedNames = selectedFood.items.filter(item => selectedSubItems[item.name]).map(item => item.name);
+        const selectedNames = selectedFood.items.filter(item => selectedSubItems[item.name]).map(item => {
+          if (item.variants) {
+            return `${item.name} (${item.variants[selectedVariants[item.name] || 0].name})`;
+          }
+          return item.name;
+        });
         if (selectedNames.length > 0) {
           name = `${selectedFood.name} (${selectedNames.join(', ')})`;
         }
@@ -76,6 +89,7 @@ const LogFood = () => {
       setPortion(1);
       setSelectedSubItems({});
       setAddonQuantities({});
+      setSelectedVariants({});
     }
   };
 
@@ -137,7 +151,40 @@ const LogFood = () => {
             {filteredFood.map((food, i) => (
               <div 
                 key={i} 
-                onClick={() => { setSelectedFood(food); setPortion(1); setSelectedSubItems({}); setAddonQuantities({}); }}
+                onClick={() => { 
+                  setSelectedFood(food); 
+                  setPortion(1); 
+                  
+                  const initialSubItems = {};
+                  if (food.type === 'composite' && food.preselectAll) {
+                    food.items.forEach(item => {
+                      initialSubItems[item.name] = true;
+                    });
+                  }
+                  setSelectedSubItems(initialSubItems);
+                  
+                  const initialAddons = {};
+                  if (food.addons) {
+                    food.addons.forEach(a => {
+                      if (a.defaultQty !== undefined) {
+                        initialAddons[a.name] = a.defaultQty;
+                      }
+                    });
+                  }
+                  setAddonQuantities(initialAddons); 
+
+                  const initialVariants = {};
+                  if (food.type === 'composite') {
+                    food.items.forEach(item => {
+                      if (item.variants) {
+                        initialVariants[item.name] = item.defaultVariant || 0;
+                      }
+                    });
+                  }
+                  setSelectedVariants(initialVariants);
+
+                  setSelectedSubItemCategory('全部'); 
+                }}
                 className="bg-white p-4 rounded-3xl shadow-sm border border-sage/30 flex justify-between items-center cursor-pointer hover:border-pink transition-colors"
               >
                 <span className="font-bold text-slate-700">{food.name}</span>
@@ -178,32 +225,81 @@ const LogFood = () => {
       </div>
 
       {/* Portion Selector Modal Slide-up */}
-      <div className={`absolute bottom-0 left-0 right-0 bg-white rounded-t-4xl shadow-[0_-10px_40px_rgba(0,0,0,0.1)] p-6 transition-transform duration-300 transform ${selectedFood ? 'translate-y-0' : 'translate-y-full'} z-40`}>
+      <div className={`absolute bottom-0 left-0 right-0 bg-white rounded-t-4xl shadow-[0_-10px_40px_rgba(0,0,0,0.1)] p-6 transition-transform duration-300 transform flex flex-col max-h-[75vh] ${selectedFood ? 'translate-y-0' : 'translate-y-full'} z-40`}>
         {selectedFood && (
           <>
             <div className="flex justify-between items-center mb-6">
               <h3 className="font-bold text-xl text-slate-700">{selectedFood.name}</h3>
-              <button onClick={() => { setSelectedFood(null); setSelectedSubItems({}); setAddonQuantities({}); }} className="p-2 text-slate-400 hover:text-slate-600 bg-slate-100 rounded-full">
+              <button onClick={() => { setSelectedFood(null); setSelectedSubItems({}); setAddonQuantities({}); setSelectedVariants({}); setSelectedSubItemCategory('全部'); }} className="p-2 text-slate-400 hover:text-slate-600 bg-slate-100 rounded-full">
                 <X size={20} />
               </button>
             </div>
             
+            <div className="flex-1 overflow-y-auto hide-scrollbar -mx-2 px-2 pb-4">
+            
             {selectedFood.type === 'composite' ? (
-              <div className="mb-6 max-h-48 overflow-y-auto hide-scrollbar border border-pink/20 rounded-2xl p-2 bg-white/50">
+              <div className="mb-6">
                 <p className="text-sm text-slate-500 font-medium mb-2 px-2">选择配菜：</p>
-                {selectedFood.items.map(item => {
-                  const isSelected = !!selectedSubItems[item.name];
+                {(() => {
+                  const hasGroups = selectedFood.items.some(item => item.group);
+                  const groups = hasGroups ? ['全部', ...new Set(selectedFood.items.map(item => item.group).filter(Boolean))] : [];
+                  
                   return (
-                    <div 
-                      key={item.name} 
-                      onClick={() => handleToggleSubItem(item.name)}
-                      className={`flex items-center justify-between p-3 rounded-xl cursor-pointer transition-colors mb-2 border ${isSelected ? 'border-pink bg-pink/10' : 'border-transparent hover:bg-slate-50'}`}
-                    >
-                      <span className={`font-medium ${isSelected ? 'text-pink' : 'text-slate-700'}`}>{item.name}</span>
-                      <span className={`text-sm font-semibold ${isSelected ? 'text-pink' : 'text-slate-400'}`}>{item.kcal} kcal</span>
-                    </div>
+                    <>
+                      {hasGroups && (
+                        <div className="flex gap-2 overflow-x-auto hide-scrollbar mb-3 px-2 pb-2">
+                          {groups.map(g => (
+                            <button
+                              key={g}
+                              onClick={() => setSelectedSubItemCategory(g)}
+                              className={`whitespace-nowrap px-4 py-1.5 rounded-full text-sm font-semibold transition-colors ${
+                                selectedSubItemCategory === g 
+                                  ? 'bg-pink text-white shadow-sm' 
+                                  : 'bg-white border border-pink/20 text-slate-600 hover:border-pink hover:text-pink'
+                              }`}
+                            >
+                              {g}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                      <div className="border border-pink/20 rounded-2xl p-2 bg-white/50">
+                        {selectedFood.items
+                          .filter(item => selectedSubItemCategory === '全部' || !item.group || item.group === selectedSubItemCategory)
+                          .map(item => {
+                            const isSelected = !!selectedSubItems[item.name];
+                            return (
+                              <div 
+                                key={item.name} 
+                                onClick={() => handleToggleSubItem(item.name)}
+                                className={`flex items-center justify-between p-3 rounded-xl cursor-pointer transition-colors mb-2 border ${isSelected ? 'border-pink bg-pink/10' : 'border-transparent hover:bg-slate-50'}`}
+                              >
+                                <div className="flex items-center gap-2">
+                                  <span className={`font-medium ${isSelected ? 'text-pink' : 'text-slate-700'}`}>{item.name}</span>
+                                  {item.variants && (
+                                    <select
+                                      onClick={(e) => e.stopPropagation()}
+                                      value={selectedVariants[item.name] || 0}
+                                      onChange={(e) => setSelectedVariants(prev => ({ ...prev, [item.name]: parseInt(e.target.value) }))}
+                                      className={`text-xs font-semibold rounded px-1 py-0.5 outline-none cursor-pointer ${isSelected ? 'bg-pink/20 text-pink' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
+                                    >
+                                      {item.variants.map((v, idx) => (
+                                        <option key={idx} value={idx}>{v.name}</option>
+                                      ))}
+                                    </select>
+                                  )}
+                                </div>
+                                <span className={`text-sm font-semibold ${isSelected ? 'text-pink' : 'text-slate-400'}`}>
+                                  {item.variants ? item.variants[selectedVariants[item.name] || 0].kcal : item.kcal} kcal
+                                </span>
+                              </div>
+                            );
+                          })
+                        }
+                      </div>
+                    </>
                   );
-                })}
+                })()}
               </div>
             ) : (
               <p className="text-center text-slate-500 font-medium mb-4">选择份量</p>
@@ -229,7 +325,7 @@ const LogFood = () => {
             )}
 
             <div className="flex justify-center gap-2 flex-wrap mb-6">
-              {[0.5, 1, 1.5, 2, 2.5, 3].map(p => (
+              {(selectedFood.portions || [0.5, 1, 1.5, 2, 2.5, 3]).map(p => (
                 <button
                   key={p}
                   onClick={() => setPortion(p)}
@@ -250,13 +346,17 @@ const LogFood = () => {
               </span>
             </div>
             
-            <button 
-              onClick={handleAdd}
+            </div>
+            
+            <div className="shrink-0 pt-2 bg-white">
+              <button 
+                onClick={handleAdd}
               className="w-full bg-pink hover:bg-pink/90 text-white font-bold py-4 rounded-2xl flex justify-center items-center gap-2 transition-colors shadow-soft"
             >
               <Plus size={20} />
               添加 🩷
-            </button>
+              </button>
+            </div>
           </>
         )}
       </div>
