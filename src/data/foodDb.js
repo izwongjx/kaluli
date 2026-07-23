@@ -41,7 +41,13 @@ export const FOOD_DB = [
       { name: "虾姑肉 (Mantis Shrimp Meat)", kcal: 90, group: "海鲜类 (Seafood)" },
       { name: "虾仁 (Prawn)", kcal: 60, group: "海鲜类 (Seafood)" },
       { name: "鱿鱼 (Squid)", kcal: 45, group: "海鲜类 (Seafood)" },
-      { name: "金枪鱼 (Tuna)", kcal: 250, group: "海鲜类 (Seafood)" }
+      { name: "金枪鱼 (Tuna)", kcal: 250, group: "海鲜类 (Seafood)" },
+      { name: "炸豆腐 (Deep-fried tofu)", kcal: 220, group: "蛋/豆腐 (Egg/Tofu)" },
+      { name: "煎豆腐 (Pan-fried tofu)", kcal: 170, group: "蛋/豆腐 (Egg/Tofu)" },
+      { name: "水蒸蛋 (Steamed egg)", kcal: 90, group: "蛋/豆腐 (Egg/Tofu)" },
+      { name: "清蒸鱼 (Steamed fish)", kcal: 140, group: "海鲜类 (Seafood)" },
+      { name: "炸鱼 (Fried fish)", kcal: 240, group: "海鲜类 (Seafood)" },
+      { name: "冬粉 (Glass noodles)", kcal: 110, group: "其他 (Others)" }
     ]
   },
   {
@@ -94,11 +100,32 @@ export const FOOD_DB = [
   {
     name: "经典珍珠奶茶 (Tealive Signature Milk Tea)",
     kcalPerPortion: 250,
+    category: "甜点",
+    addons: [
+      { name: "加珍珠 (Add Pearl)", kcal: 180 }
+    ]
+  },
+  {
+    name: "Bang Bang 奶茶 (Tealive Bang Bang Milk Tea)",
+    kcalPerPortion: 300,
+    category: "甜点",
+    addons: [
+      { name: "加珍珠 (Add Pearl)", kcal: 180 }
+    ]
+  },
+  {
+    name: "芒果沙冰 (Tealive Mango Burst Smoothie)",
+    kcalPerPortion: 400,
     category: "甜点"
   },
   {
     name: "热狗面包 (Hotdog Bread)",
     kcalPerPortion: 340,
+    category: "甜点"
+  },
+  {
+    name: "Gardenia Chocolate Bread",
+    kcalPerPortion: 220,
     category: "甜点"
   },
   {
@@ -300,6 +327,51 @@ export const FOOD_DB = [
     name: "Subway 巧克力曲奇",
     kcalPerPortion: 215,
     category: "零食"
+  },
+  {
+    name: "满煎糕（花生） (Peanut Manjian Gao)",
+    kcalPerPortion: 170,
+    category: "甜点"
+  },
+  {
+    name: "Kuih Kapit (手蛋卷饼)",
+    kcalPerPortion: 50,
+    category: "零食"
+  },
+  {
+    name: "Cili Sos (1 packet)",
+    kcalPerPortion: 5,
+    category: "零食"
+  },
+  {
+    name: "McD Nacho Cheese (1 packet)",
+    kcalPerPortion: 45,
+    category: "零食"
+  },
+  {
+    name: "Mayonnaise (1 packet)",
+    kcalPerPortion: 70,
+    category: "零食"
+  },
+  {
+    name: "Hup Seng Biscuit (1 piece)",
+    kcalPerPortion: 40,
+    category: "零食"
+  },
+  {
+    name: "MILO Original Stick Pack (30g powder)",
+    kcalPerPortion: 123,
+    category: "甜点"
+  },
+  {
+    name: "龙眼布丁 (Longan Pudding)",
+    kcalPerPortion: 150,
+    category: "甜点"
+  },
+  {
+    name: "芒果布丁 (Mango Pudding)",
+    kcalPerPortion: 180,
+    category: "甜点"
   },
   { name: "香蕉 (Banana)", kcalPerPortion: 105, category: "水果" },
   { name: "苹果 (Apple)", kcalPerPortion: 95, category: "水果" },
