@@ -16,13 +16,6 @@ function App() {
     <div className="h-full bg-cream flex justify-center w-full font-sans overflow-hidden">
       <div className="w-full max-w-[480px] h-full flex flex-col relative overflow-hidden transition-all duration-300">
         
-        {/* Temporary Restart Button */}
-        <button 
-          onClick={() => { localStorage.clear(); window.location.reload(); }}
-          className="absolute top-2 right-2 z-50 bg-slate-800 text-white text-[10px] px-2 py-1 rounded-lg opacity-50 hover:opacity-100 shadow-sm"
-        >
-          🔄 重置测试 (Restart)
-        </button>
 
         {!quizPassed ? (
           <QuizGate />

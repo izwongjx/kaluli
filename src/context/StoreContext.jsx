@@ -15,6 +15,7 @@ export const StoreProvider = ({ children }) => {
   const [points, setPoints] = useState(0);
   const [pointHistory, setPointHistory] = useState([]);
   const [quizPassed, setQuizPassed] = useState(false);
+  const [missingFoods, setMissingFoods] = useState([]);
   const togetherSince = "2025-08-18";
 
   // Initialize data on mount and handle date changes
@@ -37,6 +38,10 @@ export const StoreProvider = ({ children }) => {
     // 4. Load Today's Logs
     const savedLogs = JSON.parse(localStorage.getItem(`log_${currentDate}`) || '[]');
     setLogs(savedLogs);
+
+    // 5. Load Missing Foods
+    const savedMissingFoods = JSON.parse(localStorage.getItem('missing_foods') || '[]');
+    setMissingFoods(savedMissingFoods);
 
     // Check if we need to calculate points from yesterday (simple approach: look at last active date if we had a last active date tracking)
     // To handle "date changes", we could track "last_opened_date".
@@ -105,10 +110,24 @@ export const StoreProvider = ({ children }) => {
     return JSON.parse(localStorage.getItem(`log_${dateStr}`) || '[]');
   };
 
-  const addPoints = (amount) => {
+  const addMissingFood = (foodName) => {
+    const newMissingFoods = [...missingFoods, { name: foodName, date: today }];
+    setMissingFoods(newMissingFoods);
+    localStorage.setItem('missing_foods', JSON.stringify(newMissingFoods));
+    
+    // Earn 100 points
+    const newTotal = points + 100;
+    setPoints(newTotal);
+    const newHistory = [...pointHistory, { date: today, points_earned: 100, note: `Recorded missing food: ${foodName}` }];
+    setPointHistory(newHistory);
+    localStorage.setItem('love_points_total', newTotal.toString());
+    localStorage.setItem('love_points_log', JSON.stringify(newHistory));
+  };
+
+  const addPoints = (amount, note = 'Earned Points') => {
     const newTotal = points + amount;
     setPoints(newTotal);
-    const newHistory = [...pointHistory, { date: today, points_earned: amount, note: 'Found Easter Egg!' }];
+    const newHistory = [...pointHistory, { date: today, points_earned: amount, note: note }];
     setPointHistory(newHistory);
     localStorage.setItem('love_points_total', newTotal.toString());
     localStorage.setItem('love_points_log', JSON.stringify(newHistory));
@@ -132,6 +151,7 @@ export const StoreProvider = ({ children }) => {
       points,
       pointHistory,
       quizPassed,
+      missingFoods,
       togetherSince,
       currentKcal,
       passQuiz,
@@ -139,7 +159,8 @@ export const StoreProvider = ({ children }) => {
       deleteLog,
       getLogsForDate,
       addPoints,
-      deductPoints
+      deductPoints,
+      addMissingFood
     }}>
       {children}
     </StoreContext.Provider>

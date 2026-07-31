@@ -30,6 +30,7 @@ export const FOOD_DB = [
       { name: "奶油鸡 (Butter Chicken)", kcal: 250, group: "肉类 (Meat)" },
       { name: "妈蜜鸡 (Marmite Chicken)", kcal: 270, group: "肉类 (Meat)" },
       { name: "食堂炸鸡 (Canteen Fried Chicken)", kcal: 280, group: "肉类 (Meat)" },
+      { name: "手枪炸鸡腿 (Whole Fried Chicken Leg)", kcal: 600, group: "肉类 (Meat)" },
       { name: "叉烧 (Char Siu)", kcal: 250, group: "肉类 (Meat)" },
       { name: "烧肉 (Roast Pork)", kcal: 300, group: "肉类 (Meat)" },
       { name: "猪肉片 (Pork Slices)", kcal: 220, group: "肉类 (Meat)" },
@@ -228,6 +229,26 @@ export const FOOD_DB = [
     ]
   },
   {
+    name: "清汤板面 (Soup Pan Mee)",
+    kcalPerPortion: 500,
+    category: "主食"
+  },
+  {
+    name: "板面 (Pan Mee)",
+    kcalPerPortion: 0,
+    type: "composite",
+    category: "主食",
+    items: [
+      { name: "面条 (Noodles)", kcal: 320 },
+      { name: "肉碎 (Minced Meat)", kcal: 120 },
+      { name: "江鱼仔 (Anchovies)", kcal: 80 },
+      { name: "青菜 (Vegetables)", kcal: 20 },
+      { name: "冬菇 (Mushroom)", kcal: 50 },
+      { name: "干捞酱 (Dry Sauce)", kcal: 180 },
+      { name: "清汤 (Clear Soup)", kcal: 30 }
+    ]
+  },
+  {
     name: "番茄汤米粉 (Tomato Soup Rice Vermicelli)",
     kcalPerPortion: 0,
     type: "composite",
@@ -296,6 +317,15 @@ export const FOOD_DB = [
     name: "海底捞辣子鸡自热米饭 (HaiDiLao Spicy Chicken Self-heating Rice)",
     kcalPerPortion: 600,
     category: "主食"
+  },
+  {
+    name: "炸鸡排 (Chicken Katsu)",
+    kcalPerPortion: 930,
+    category: "主食",
+    addons: [
+      { name: "日式咖喱酱 (Japanese Curry Sauce)", kcal: 60 },
+      { name: "黑胡椒酱 (Black Pepper Sauce)", kcal: 80 }
+    ]
   },
   {
     name: "Lexus 巧克力饼",
@@ -372,6 +402,16 @@ export const FOOD_DB = [
     name: "芒果布丁 (Mango Pudding)",
     kcalPerPortion: 180,
     category: "甜点"
+  },
+  {
+    name: "咖喱角 (Curry Puff)",
+    kcalPerPortion: 220,
+    category: "零食"
+  },
+  {
+    name: "酸柑桔 (Lime Drink)",
+    kcalPerPortion: 150,
+    category: "饮料"
   },
   { name: "香蕉 (Banana)", kcalPerPortion: 105, category: "水果" },
   { name: "苹果 (Apple)", kcalPerPortion: 95, category: "水果" },

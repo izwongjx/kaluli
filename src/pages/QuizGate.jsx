@@ -112,17 +112,17 @@ const QuizGate = () => {
             欢迎来到
           </div>
           
-          <div className="mb-10 text-base tracking-[0.2em] text-slate-500 font-medium uppercase">
+          <div className="mb-6 text-base tracking-[0.2em] text-slate-500 font-medium uppercase">
             welcome to
           </div>
           
           {/* Avatar with floating animation */}
-          <div className="relative w-64 h-auto mb-10 flex justify-center items-center animate-[float_4s_ease-in-out_infinite]">
+          <div className="relative w-64 h-auto mb-6 flex justify-center items-center animate-[float_4s_ease-in-out_infinite]">
             <div className="absolute inset-0 bg-white/40 rounded-full blur-3xl transform scale-75"></div>
             <img src="/girl1.png" alt="Girl Avatar" className="w-full h-full object-contain relative z-10 drop-shadow-xl" />
           </div>
           
-          <div className="mb-12 text-lg font-bold tracking-widest text-slate-600 bg-white/50 px-6 py-2 rounded-full border border-white/60 shadow-sm backdrop-blur-sm">
+          <div className="mb-8 text-lg font-bold tracking-widest text-slate-600 bg-white/50 px-6 py-2 rounded-full border border-white/60 shadow-sm backdrop-blur-sm">
             ✨ 专属卡路里计算机 ✨
           </div>
           

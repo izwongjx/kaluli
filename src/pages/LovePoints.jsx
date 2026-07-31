@@ -108,17 +108,6 @@ const LovePoints = () => {
         )}
       </div>
 
-      {/* Temporary Reset Button */}
-      <button 
-        onClick={() => {
-          localStorage.removeItem('love_points_total');
-          localStorage.removeItem('love_points_log');
-          window.location.reload();
-        }}
-        className="mt-12 text-[11px] text-slate-300 hover:text-slate-500 underline decoration-slate-300 w-full text-center pb-4"
-      >
-        [测试专用: 清空数据 (Reset to 0)]
-      </button>
 
       {/* Redeem Modal Overlay */}
       {redeemModal && (

@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
+import { Settings, X, Plus } from 'lucide-react';
 
 const History = () => {
-  const { today, getLogsForDate } = useStore();
+  const { today, getLogsForDate, addPoints, missingFoods } = useStore();
   const [selectedDate, setSelectedDate] = useState(today);
+  const [showAdminModal, setShowAdminModal] = useState(false);
+  const [showLogoutPrompt, setShowLogoutPrompt] = useState(false);
+  const [addPointsAmount, setAddPointsAmount] = useState('');
 
   // Generate last 7 days array
   const last7Days = [];
@@ -30,8 +34,17 @@ const History = () => {
   const selectedDayData = last7Days.find(d => d.dateStr === selectedDate);
 
   return (
-    <div className="flex flex-col h-full p-6 pb-24 overflow-y-auto">
-      <h1 className="text-2xl font-bold text-slate-700 mb-8 text-center">历史记录 📊</h1>
+    <div className="flex flex-col h-full p-6 pb-24 overflow-y-auto relative">
+      <div className="flex justify-between items-center mb-8 relative">
+        <button 
+          onClick={() => setShowLogoutPrompt(true)}
+          className="text-slate-400 hover:text-slate-600 transition-colors p-2 -ml-2 rounded-full hover:bg-slate-100"
+        >
+          <Settings size={24} />
+        </button>
+        <h1 className="text-2xl font-bold text-slate-700 absolute left-1/2 -translate-x-1/2">历史记录 📊</h1>
+        <div className="w-8"></div>
+      </div>
       
       {/* 7-Day Custom Bar Chart */}
       <div className="bg-white p-6 rounded-4xl shadow-sm border border-sage/30 mb-8">
@@ -105,6 +118,91 @@ const History = () => {
           )}
         </div>
       </div>
+
+      {/* Logout Prompt Modal */}
+      {showLogoutPrompt && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-6 backdrop-blur-sm animate-[overlayEnter_0.3s_ease-out]">
+          <div className="bg-white/95 backdrop-blur-xl rounded-[32px] p-8 flex flex-col items-center w-[300px] shadow-xl border border-white/60 animate-[modalEnter_0.4s_cubic-bezier(0.175,0.885,0.32,1.275)] text-center">
+            <h2 className="text-xl font-bold text-slate-800 mb-2">Warning</h2>
+            <p className="text-slate-500 font-medium mb-8">Do you wanna logout?</p>
+            <div className="flex flex-col gap-3 w-full">
+              <button 
+                onClick={() => {
+                  setShowLogoutPrompt(false);
+                  setShowAdminModal(true);
+                }}
+                className="bg-pink text-white px-6 py-3 rounded-2xl font-bold text-sm shadow-sm hover:bg-pink/90 transition-all w-full"
+              >
+                Logout
+              </button>
+              <button 
+                onClick={() => setShowLogoutPrompt(false)}
+                className="bg-slate-100 text-slate-600 px-6 py-3 rounded-2xl font-bold text-sm hover:bg-slate-200 transition-all w-full"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Admin Modal */}
+      {showAdminModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-6 backdrop-blur-sm animate-[overlayEnter_0.3s_ease-out]">
+          <div className="bg-white/95 backdrop-blur-xl rounded-[32px] p-6 flex flex-col w-full max-w-md shadow-xl border border-white/60 relative animate-[modalEnter_0.4s_cubic-bezier(0.175,0.885,0.32,1.275)] max-h-[80vh] overflow-hidden">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold text-slate-800">Admin Settings</h2>
+              <button onClick={() => setShowAdminModal(false)} className="p-2 text-slate-400 hover:text-slate-600 bg-slate-100 rounded-full">
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="overflow-y-auto hide-scrollbar flex-1 -mx-2 px-2">
+              <div className="mb-6 bg-pink/10 p-4 rounded-2xl border border-pink/20">
+                <h3 className="font-bold text-slate-700 mb-3 text-sm">Add Points Manually</h3>
+                <div className="flex gap-2">
+                  <input
+                    type="number"
+                    placeholder="Amount"
+                    value={addPointsAmount}
+                    onChange={(e) => setAddPointsAmount(e.target.value)}
+                    className="flex-1 bg-white rounded-xl px-4 py-2 text-sm border border-pink/30 focus:outline-none focus:ring-2 focus:ring-pink/50"
+                  />
+                  <button
+                    onClick={() => {
+                      const val = parseInt(addPointsAmount);
+                      if (!isNaN(val) && val !== 0) {
+                        addPoints(val, 'Admin manual addition');
+                        setAddPointsAmount('');
+                        alert(`Successfully added ${val} points!`);
+                      }
+                    }}
+                    className="bg-pink text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-pink/90 transition-colors shadow-sm flex items-center gap-1"
+                  >
+                    <Plus size={16} /> Add
+                  </button>
+                </div>
+              </div>
+              
+              <div className="mb-2">
+                <h3 className="font-bold text-slate-700 mb-3 text-sm">Requested Missing Foods</h3>
+                {(!missingFoods || missingFoods.length === 0) ? (
+                  <p className="text-slate-400 text-sm text-center py-4 bg-slate-50 rounded-2xl">No requests yet.</p>
+                ) : (
+                  <div className="flex flex-col gap-2">
+                    {missingFoods.slice().reverse().map((item, idx) => (
+                      <div key={idx} className="bg-white p-3 rounded-xl border border-slate-200 flex justify-between items-center shadow-sm">
+                        <span className="font-medium text-slate-700 text-sm">{item.name}</span>
+                        <span className="text-xs text-slate-400 font-medium">{item.date}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

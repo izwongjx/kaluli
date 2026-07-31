@@ -4,8 +4,9 @@ import { FOOD_DB } from '../data/foodDb';
 import { Search, Plus, Trash2, X, Utensils, IceCream, Cookie, Apple } from 'lucide-react';
 
 const LogFood = () => {
-  const { logs, addLog, deleteLog } = useStore();
+  const { logs, addLog, deleteLog, addMissingFood } = useStore();
   const [search, setSearch] = useState('');
+  const [missingFoodInput, setMissingFoodInput] = useState('');
   const [selectedFood, setSelectedFood] = useState(null);
   const [portion, setPortion] = useState(1);
   const [selectedSubItems, setSelectedSubItems] = useState({});
@@ -192,7 +193,29 @@ const LogFood = () => {
               </div>
             ))}
             {filteredFood.length === 0 && (
-              <div className="text-center text-slate-400 mt-8 font-medium">找不到这个食物 😭</div>
+              <div className="flex flex-col items-center mt-8 p-6 bg-pink/5 rounded-3xl border border-pink/20 shadow-sm">
+                <div className="text-center text-slate-500 font-bold mb-4">找不到这个食物 😭</div>
+                <input
+                  type="text"
+                  placeholder="输入找不到的食物..."
+                  value={missingFoodInput}
+                  onChange={(e) => setMissingFoodInput(e.target.value)}
+                  className="w-full bg-white rounded-xl py-3 px-4 shadow-inner border border-pink/30 focus:outline-none focus:ring-2 focus:ring-pink/50 mb-4 text-sm font-medium text-slate-700 placeholder:text-slate-400"
+                />
+                <button
+                  onClick={() => {
+                    if(missingFoodInput.trim()) {
+                      addMissingFood(missingFoodInput.trim());
+                      setMissingFoodInput('');
+                      setSearch('');
+                      alert('记录成功！获得 100 分 🎉');
+                    }
+                  }}
+                  className="bg-pink text-white font-bold py-3 px-6 rounded-xl w-full flex items-center justify-center hover:bg-pink/90 transition-colors shadow-md text-sm"
+                >
+                  记录及获取100分 🪙
+                </button>
+              </div>
             )}
           </div>
         ) : (
