@@ -34,7 +34,7 @@ const History = () => {
   const selectedDayData = last7Days.find(d => d.dateStr === selectedDate);
 
   return (
-    <div className="flex flex-col h-full p-6 pb-24 overflow-y-auto relative">
+    <div className="flex flex-col h-full px-6 pb-24 overflow-y-auto relative" style={{ paddingTop: 'max(1.5rem, env(safe-area-inset-top))' }}>
       <div className="flex justify-between items-center mb-8 relative">
         <button 
           onClick={() => setShowLogoutPrompt(true)}
