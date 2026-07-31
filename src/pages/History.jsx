@@ -166,7 +166,7 @@ const History = () => {
                     placeholder="Amount"
                     value={addPointsAmount}
                     onChange={(e) => setAddPointsAmount(e.target.value)}
-                    className="flex-1 bg-white rounded-xl px-4 py-2 text-sm border border-pink/30 focus:outline-none focus:ring-2 focus:ring-pink/50"
+                    className="flex-1 min-w-0 bg-white rounded-xl px-4 py-2 text-sm border border-pink/30 focus:outline-none focus:ring-2 focus:ring-pink/50"
                   />
                   <button
                     onClick={() => {
@@ -177,7 +177,7 @@ const History = () => {
                         alert(`Successfully added ${val} points!`);
                       }
                     }}
-                    className="bg-pink text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-pink/90 transition-colors shadow-sm flex items-center gap-1"
+                    className="shrink-0 whitespace-nowrap bg-pink text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-pink/90 transition-colors shadow-sm flex items-center justify-center gap-1"
                   >
                     <Plus size={16} /> Add
                   </button>
